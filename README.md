@@ -1,7 +1,7 @@
 
 # UI Sounds
 
-A system to have centralized management for UI sounds.
+A system for centralized management of UI sounds.
 
 # Installing
 

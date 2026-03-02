@@ -1,7 +1,7 @@
 {
   "name": "com.jansharp.ui-sounds",
   "version": "0.1.0",
-  "description": "A system to have centralized management for UI sounds.",
+  "description": "A system for centralized management of UI sounds.",
   "displayName": "UI Sounds",
   "unity": "2022.3",
   "author": {
