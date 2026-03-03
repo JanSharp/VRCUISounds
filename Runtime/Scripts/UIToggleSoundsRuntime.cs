@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace JanSharp
 {
     [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
-    public class UIToggleSounds : UdonSharpBehaviour
+    public class UIToggleSoundsRuntime : UdonSharpBehaviour
     {
         [SerializeField] private Toggle toggle;
         [SerializeField] private UISoundsListener onTurnOnListener;
