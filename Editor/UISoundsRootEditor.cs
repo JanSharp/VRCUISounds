@@ -43,4 +43,16 @@ namespace JanSharp
             return false;
         }
     }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UISoundsRoot))]
+    public class UISoundsRootEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            DrawPropertiesExcluding(serializedObject, "m_Script");
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
 }
