@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace JanSharp
@@ -40,6 +42,49 @@ namespace JanSharp
                 if (!button.TryGetComponent<UIButtonSounds>(out _))
                     UISoundsListenerUtil.SetPersistentListener(button, "m_OnClick", listener: null);
             return true;
+        }
+    }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UIButtonSounds))]
+    public class UIButtonSoundsEditor : Editor
+    {
+        [MenuItem("CONTEXT/" + nameof(Button) + "/Add UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool AddSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuAddSoundsValidation<UIButtonSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Button) + "/Add UI Sounds", secondaryPriority = 10)]
+        public static void AddSounds(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuAddSounds<UIButtonSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Button) + "/Remove UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool RemoveSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuRemoveSoundsValidation<UIButtonSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Button) + "/Remove UI Sounds", secondaryPriority = 10)]
+        public static void RemoveSounds(MenuCommand menuCommand)
+        {
+            Button target = (Button)menuCommand.context;
+            RemoveSounds(target, target.GetComponent<UIButtonSounds>());
+        }
+
+        private static void RemoveSounds(Button button, UIButtonSounds buttonSounds)
+        {
+            UISoundsListenerUtil.SetPersistentListener(button, "m_OnClick", listener: null);
+            Undo.DestroyObjectImmediate(buttonSounds);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            DrawPropertiesExcluding(serializedObject, "m_Script");
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button("Remove UI Sounds"))
+                foreach (UIButtonSounds buttonSounds in targets.Cast<UIButtonSounds>())
+                    RemoveSounds(buttonSounds.GetComponent<Button>(), buttonSounds);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace JanSharp
@@ -40,6 +42,49 @@ namespace JanSharp
                 if (!slider.TryGetComponent<UISliderSounds>(out _))
                     UISoundsListenerUtil.SetPersistentListener(slider, "m_OnValueChanged", listener: null);
             return true;
+        }
+    }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UISliderSounds))]
+    public class UISliderSoundsEditor : Editor
+    {
+        [MenuItem("CONTEXT/" + nameof(Slider) + "/Add UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool AddSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuAddSoundsValidation<UISliderSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Slider) + "/Add UI Sounds", secondaryPriority = 10)]
+        public static void AddSounds(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuAddSounds<UISliderSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Slider) + "/Remove UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool RemoveSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuRemoveSoundsValidation<UISliderSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Slider) + "/Remove UI Sounds", secondaryPriority = 10)]
+        public static void RemoveSounds(MenuCommand menuCommand)
+        {
+            Slider target = (Slider)menuCommand.context;
+            RemoveSounds(target, target.GetComponent<UISliderSounds>());
+        }
+
+        private static void RemoveSounds(Slider slider, UISliderSounds sliderSounds)
+        {
+            UISoundsListenerUtil.SetPersistentListener(slider, "m_OnValueChanged", listener: null);
+            Undo.DestroyObjectImmediate(sliderSounds);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            DrawPropertiesExcluding(serializedObject, "m_Script");
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button("Remove UI Sounds"))
+                foreach (UISliderSounds sliderSounds in targets.Cast<UISliderSounds>())
+                    RemoveSounds(sliderSounds.GetComponent<Slider>(), sliderSounds);
         }
     }
 }

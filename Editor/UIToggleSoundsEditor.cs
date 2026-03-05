@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using UdonSharpEditor;
 using UnityEditor;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace JanSharp
@@ -57,6 +59,62 @@ namespace JanSharp
             soundsRuntime = UdonSharpUndo.AddComponent<UIToggleSoundsRuntime>(toggleSounds.gameObject);
             OnBuildUtil.MarkForRerunDueToScriptInstantiation();
             return soundsRuntime;
+        }
+    }
+
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(UIToggleSounds))]
+    public class UIToggleSoundsEditor : Editor
+    {
+        [MenuItem("CONTEXT/" + nameof(Toggle) + "/Add UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool AddSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuAddSoundsValidation<UIToggleSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Toggle) + "/Add UI Sounds", secondaryPriority = 10)]
+        public static void AddSounds(MenuCommand menuCommand)
+        {
+            UISoundsEditorUtil.ContextMenuAddSounds<UIToggleSounds>(menuCommand);
+            Toggle target = (Toggle)menuCommand.context;
+            // Just for transparency, it would get added on build anyway.
+            UdonSharpUndo.AddComponent<UIToggleSoundsRuntime>(target.gameObject);
+        }
+
+        [MenuItem("CONTEXT/" + nameof(Toggle) + "/Remove UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
+        public static bool RemoveSoundsValidation(MenuCommand menuCommand)
+            => UISoundsEditorUtil.ContextMenuRemoveSoundsValidation<UIToggleSounds>(menuCommand);
+
+        [MenuItem("CONTEXT/" + nameof(Toggle) + "/Remove UI Sounds", secondaryPriority = 10)]
+        public static void RemoveSounds(MenuCommand menuCommand)
+        {
+            Toggle target = (Toggle)menuCommand.context;
+            RemoveSounds(target, target.GetComponent<UIToggleSounds>());
+        }
+
+        private static void RemoveSounds(Toggle toggle, UIToggleSounds toggleSounds)
+        {
+            UISoundsListenerUtil.SetPersistentListener<UIToggleSoundsRuntime>(
+                toggle,
+                "onValueChanged",
+                target: null,
+                nameof(UIToggleSoundsRuntime.OnValueChanged));
+
+            UIToggleSoundsRuntime soundsRuntime = toggleSounds.GetComponent<UIToggleSoundsRuntime>();
+            if (soundsRuntime != null)
+                UdonSharpUndo.DestroyImmediate(soundsRuntime);
+            Undo.DestroyObjectImmediate(toggleSounds);
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+            DrawPropertiesExcluding(serializedObject, "m_Script");
+            serializedObject.ApplyModifiedProperties();
+
+            EditorGUILayout.Space();
+
+            if (GUILayout.Button("Remove UI Sounds"))
+                foreach (UIToggleSounds toggleSounds in targets.Cast<UIToggleSounds>())
+                    RemoveSounds(toggleSounds.GetComponent<Toggle>(), toggleSounds);
         }
     }
 }
