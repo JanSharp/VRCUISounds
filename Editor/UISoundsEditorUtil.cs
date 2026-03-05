@@ -78,6 +78,33 @@ namespace JanSharp
             return true;
         }
 
+        public static bool TryGetContainerFromRoots(IEnumerable<Component> targets, out UISoundDefinitionGroup defGroup, out string errorMsg)
+        {
+            defGroup = null;
+            UISoundDefinitionGroup[] defGroups = targets
+                .Select(p => p.GetComponentInParent<UISoundsRoot>(includeInactive: true)?.definitionGroup)
+                .ToArray();
+            if (defGroups.All(c => c == null))
+            {
+                errorMsg = "Missing UI Sounds Root in parents.";
+                return false;
+            }
+            if (defGroups.Any(c => c == null))
+            {
+                errorMsg = "Some selected objects are not a child of any UI Sounds Root.";
+                return false;
+            }
+            if (defGroups.Distinct().Count() != 1)
+            {
+                errorMsg = "Selected objects are children of different UI Sounds Roots referencing different "
+                    + "UI Sound Definition Groups.";
+                return false;
+            }
+            defGroup = defGroups[0];
+            errorMsg = null;
+            return true;
+        }
+
         public static void GetDefinitionNames(UISoundDefinitionGroup defGroup, out string[] defNames)
         {
             defNames = defGroup.GetComponentsInChildren<UISoundDefinition>(includeInactive: true)
@@ -109,6 +136,35 @@ namespace JanSharp
                         prop.stringValue = names[newIndex];
                 }
             }
+        }
+
+        // Copy paste from the UI Styling package.
+        public static void DrawSelectorField(Rect rect, SerializedProperty prop, string errorMsg, string[] names)
+            => DrawSelectorField(rect, prop, errorMsg, names, (r, p) => EditorGUI.PropertyField(r, p));
+
+        // Copy paste from the UI Styling package.
+        public static void DrawSelectorField(Rect rect, SerializedProperty prop, GUIContent label, string errorMsg, string[] names)
+            => DrawSelectorField(rect, prop, errorMsg, names, (r, p) => EditorGUI.PropertyField(r, p, label));
+
+        // Copy paste from the UI Styling package, and edited to remove the apply button and have a tooltip on the popup button.
+        private static void DrawSelectorField(Rect rect, SerializedProperty prop, string errorMsg, string[] names, System.Action<Rect, SerializedProperty> drawProp)
+        {
+            float width = rect.width;
+            rect.width -= 2f + 20f;
+            drawProp(rect, prop);
+            rect.width = 20f;
+            rect.x += width - rect.width;
+            if (errorMsg != null)
+            {
+                EditorGUI.BeginDisabledGroup(true);
+                GUI.Button(rect, new GUIContent("", errorMsg), EditorStyles.popup); // A button to be able to have a tooltip.
+                EditorGUI.EndDisabledGroup();
+                return;
+            }
+            int index = System.Array.IndexOf(names, prop.stringValue);
+            int newIndex = EditorGUI.Popup(rect, index, names);
+            if (newIndex != index)
+                prop.stringValue = names[newIndex];
         }
     }
 
