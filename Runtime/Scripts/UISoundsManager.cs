@@ -8,6 +8,10 @@ namespace JanSharp.Internal
     public class UISoundsManager : UISoundsManagerAPI
     {
         [SerializeField] private AudioSource audioSource;
+        [SerializeField] private Transform listenersContainer;
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        public Transform ListenersContainer => listenersContainer;
+#endif
 
         [SerializeField] private bool muted = false;
         public override bool Muted
