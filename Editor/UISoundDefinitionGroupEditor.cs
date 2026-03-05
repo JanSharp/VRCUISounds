@@ -29,6 +29,8 @@ namespace JanSharp
             return result;
         }
 
+        public static bool IsDefinitionActive(UISoundDefinition def) => def.gameObject.activeSelf;
+
         private static bool OnBuild(UISoundDefinitionGroup defGroup)
         {
             Dictionary<string, UISoundDefinition> defsByName = new();
@@ -36,7 +38,7 @@ namespace JanSharp
 
             foreach (UISoundDefinition def in defGroup.GetComponentsInChildren<UISoundDefinition>(includeInactive: true))
             {
-                if (!def.gameObject.activeSelf)
+                if (!IsDefinitionActive(def))
                     continue;
                 if (defsByName.ContainsKey(def.name))
                 {

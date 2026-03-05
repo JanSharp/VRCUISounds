@@ -47,7 +47,7 @@ namespace JanSharp
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(UISliderSounds))]
-    public class UISliderSoundsEditor : Editor
+    public class UISliderSoundsEditor : UISoundsEditor<UISliderSounds>
     {
         [MenuItem("CONTEXT/" + nameof(Slider) + "/Add UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
         public static bool AddSoundsValidation(MenuCommand menuCommand)
@@ -74,11 +74,23 @@ namespace JanSharp
             Undo.DestroyObjectImmediate(sliderSounds);
         }
 
+        private SerializedObject so;
+        private SerializedProperty definitionNameProp;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            so = serializedObject;
+            definitionNameProp = so.FindProperty("definitionName");
+        }
+
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-            DrawPropertiesExcluding(serializedObject, "m_Script");
-            serializedObject.ApplyModifiedProperties();
+            DrawInvalidHeader();
+
+            so.Update();
+            DrawDefSelectorField(definitionNameProp);
+            so.ApplyModifiedProperties();
 
             EditorGUILayout.Space();
 

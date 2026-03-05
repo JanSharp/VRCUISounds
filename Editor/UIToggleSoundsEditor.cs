@@ -64,7 +64,7 @@ namespace JanSharp
 
     [CanEditMultipleObjects]
     [CustomEditor(typeof(UIToggleSounds))]
-    public class UIToggleSoundsEditor : Editor
+    public class UIToggleSoundsEditor : UISoundsEditor<UIToggleSounds>
     {
         [MenuItem("CONTEXT/" + nameof(Toggle) + "/Add UI Sounds", isValidateFunction: true, secondaryPriority = 10)]
         public static bool AddSoundsValidation(MenuCommand menuCommand)
@@ -104,11 +104,26 @@ namespace JanSharp
             Undo.DestroyObjectImmediate(toggleSounds);
         }
 
+        private SerializedObject so;
+        private SerializedProperty turnOnDefinitionNameProp;
+        private SerializedProperty turnOffDefinitionNameProp;
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            so = serializedObject;
+            turnOnDefinitionNameProp = so.FindProperty("turnOnDefinitionName");
+            turnOffDefinitionNameProp = so.FindProperty("turnOffDefinitionName");
+        }
+
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-            DrawPropertiesExcluding(serializedObject, "m_Script");
-            serializedObject.ApplyModifiedProperties();
+            DrawInvalidHeader();
+
+            so.Update();
+            DrawDefSelectorField(turnOnDefinitionNameProp);
+            DrawDefSelectorField(turnOffDefinitionNameProp);
+            so.ApplyModifiedProperties();
 
             EditorGUILayout.Space();
 
