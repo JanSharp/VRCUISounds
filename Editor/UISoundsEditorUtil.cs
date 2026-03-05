@@ -25,12 +25,16 @@ namespace JanSharp
 
             Component[] components = target.gameObject.GetComponents<Component>();
             int targetIndex = System.Array.IndexOf(components, target);
-            int applierIndex = System.Array.IndexOf(components, component);
-            if (targetIndex < 0 || applierIndex < 0)
+            int componentIndex = System.Array.IndexOf(components, component);
+            if (targetIndex < 0 || componentIndex < 0)
                 throw new System.Exception("[UISounds] Impossible.");
 
-            for (int i = 0; i < applierIndex - targetIndex - 1; i++)
-                UnityEditorInternal.ComponentUtility.MoveComponentUp(component);
+            for (int i = componentIndex - 1; i > targetIndex; i--)
+                if (components[i] == null // A missing script, very most likely if not guaranteed to be shown in inspector.
+                    || (components[i].hideFlags & HideFlags.HideInInspector) == 0)
+                {
+                    UnityEditorInternal.ComponentUtility.MoveComponentUp(component);
+                }
         }
 
         public static bool ContextMenuRemoveSoundsValidation<T>(MenuCommand menuCommand)
