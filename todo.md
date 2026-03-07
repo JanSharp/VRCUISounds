@@ -5,3 +5,4 @@
   - [x] add a remove button in the inspector for those components too
 - [x] definition name drop downs
 - [x] create and delete UIToggleSoundsRuntime script on build as required
+- [ ] pitch variations
