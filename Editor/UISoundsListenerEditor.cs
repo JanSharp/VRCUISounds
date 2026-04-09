@@ -58,7 +58,7 @@ namespace JanSharp
                 foreach (var listener in EditorUtil.EnumeratePersistentEventListeners(eventProp))
                 {
                     if ((listener.Target == null
-                            || (listener.Target is UdonBehaviour ub && UdonSharpEditorUtility.GetProxyBehaviour(ub).GetType() == typeof(T)))
+                            || (listener.Target is UdonBehaviour ub && UdonSharpEditorUtility.GetProxyBehaviour(ub)?.GetType() == typeof(T)))
                         && listener.MethodName == nameof(UdonBehaviour.SendCustomEvent)
                         && listener.StringArgument == customEventName)
                     {
