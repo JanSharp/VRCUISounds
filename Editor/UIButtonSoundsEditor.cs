@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UIButtonSoundsOnBuild
     {
-        static UIButtonSoundsOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterTypeCumulative<UIButtonSounds>(OnBuild, order: -990);
             OnBuildUtil.RegisterTypeCumulative<Button>(OnButtonBuild, order: -980);

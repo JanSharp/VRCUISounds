@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UIToggleSoundsOnBuild
     {
-        static UIToggleSoundsOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterTypeCumulative<UIToggleSounds>(OnBuild, order: -990);
         }

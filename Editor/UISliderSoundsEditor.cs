@@ -6,10 +6,10 @@ using UnityEngine.UI;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISliderSoundsOnBuild
     {
-        static UISliderSoundsOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterTypeCumulative<UISliderSounds>(OnBuild, order: -990);
             OnBuildUtil.RegisterTypeCumulative<Slider>(OnSliderBuild, order: -980);

@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISoundsRootOnBuild
     {
-        static UISoundsRootOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterTypeCumulative<UISoundsRoot>(OnBuild, order: -1000);
         }

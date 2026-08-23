@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISoundDefinitionGroupOnBuild
     {
         private static Dictionary<UISoundDefinitionGroup, Dictionary<string, UISoundDefinition>> defsByNameByGroup = new();
 
-        static UISoundDefinitionGroupOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterAction(OnPreBuild, order: -1001);
             OnBuildUtil.RegisterTypeCumulative<UISoundDefinitionGroup>(OnBuild, order: -1000, includeEditorOnly: true);

@@ -8,10 +8,10 @@ using VRC.Udon;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISoundsListenerOnBuild
     {
-        static UISoundsListenerOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterTypeCumulative<UISoundsListener>(OnBuild, order: -900);
         }

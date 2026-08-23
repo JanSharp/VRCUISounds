@@ -6,7 +6,6 @@ using UnityEngine;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISoundsManagerOnBuild
     {
         private static Dictionary<UISoundDefinition, UISoundsListener> listenersByDef = new();
@@ -15,7 +14,8 @@ namespace JanSharp
         private static UISoundsManager manager;
         private static bool didCreateNewListeners;
 
-        static UISoundsManagerOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             OnBuildUtil.RegisterAction(OnPreBuild, order: -1001);
             OnBuildUtil.RegisterType<UISoundsManager>(OnBuild, order: -1000, includeEditorOnly: true);

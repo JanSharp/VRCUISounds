@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace JanSharp
 {
-    [InitializeOnLoad]
     public static class UISoundsAttributesOnBuild
     {
         /// <summary>
@@ -44,7 +43,8 @@ namespace JanSharp
             }
         }
 
-        static UISoundsAttributesOnBuild()
+        [OrderedInitializeOnLoad]
+        private static void OnAssemblyLoad()
         {
             ubTypeCache.Clear();
             invalidUbTypes.Clear();
