@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4076345335211872797}
   - component: {fileID: 4345164436463934999}
+  - component: {fileID: 3141050277170324507}
   m_Layer: 0
   m_Name: UISoundsSource
   m_TagString: Untagged
@@ -128,6 +129,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &3141050277170324507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2339470238659670303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -617992517, guid: 661092b4961be7145bfbe56e1e62337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Gain: 0
+  Far: 0
+  Near: 0
+  VolumetricRadius: 0
+  EnableSpatialization: 0
+  UseAudioSourceVolumeCurve: 0
 --- !u!1 &5850059285247049777
 GameObject:
   m_ObjectHideFlags: 0
