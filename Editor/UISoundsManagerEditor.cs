@@ -98,10 +98,10 @@ namespace JanSharp
         private static void MakeListenerMatchDef(UISoundsListener listener, UISoundDefinition def)
         {
             SerializedObject listenerGo = new(listener);
-            listenerGo.FindProperty("uiSoundsManager").objectReferenceValue = manager;
-            listenerGo.FindProperty("soundDefinitionGo").objectReferenceValue = def.gameObject;
-            listenerGo.FindProperty("audioClip").objectReferenceValue = def.audioClip;
-            listenerGo.FindProperty("volume").floatValue = def.volume;
+            listenerGo.FindProperty(UISoundsListener.UiSoundsManagerPropName).objectReferenceValue = manager;
+            listenerGo.FindProperty(UISoundsListener.SoundDefinitionGoPropName).objectReferenceValue = def.gameObject;
+            listenerGo.FindProperty(UISoundsListener.AudioClipPropName).objectReferenceValue = def.audioClip;
+            listenerGo.FindProperty(UISoundsListener.VolumePropName).floatValue = def.volume;
             listenerGo.ApplyModifiedProperties();
 
             SerializedObject goSo = new(listener.gameObject);
@@ -124,9 +124,9 @@ namespace JanSharp
         private void OnEnable()
         {
             so = serializedObject;
-            audioSourceProp = so.FindProperty("audioSource");
-            listenersContainerProp = so.FindProperty("listenersContainer");
-            mutedProp = so.FindProperty("muted");
+            audioSourceProp = so.FindProperty(UISoundsManager.AudioSourcePropName);
+            listenersContainerProp = so.FindProperty(UISoundsManager.ListenersContainerPropName);
+            mutedProp = so.FindProperty(UISoundsManager.MutedPropName);
             CheckAudioSourceProp();
         }
 

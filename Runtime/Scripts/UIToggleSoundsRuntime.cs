@@ -12,6 +12,11 @@ namespace JanSharp
         [SerializeField] private Toggle toggle;
         [SerializeField] private UISoundsListener onTurnOnListener;
         [SerializeField] private UISoundsListener onTurnOffListener;
+#if UNITY_EDITOR && !COMPILER_UDONSHARP
+        public const string TogglePropName = nameof(toggle);
+        public const string OnTurnOnListenerPropName = nameof(onTurnOnListener);
+        public const string OnTurnOffListenerPropName = nameof(onTurnOffListener);
+#endif
 
         public void OnValueChanged()
         {

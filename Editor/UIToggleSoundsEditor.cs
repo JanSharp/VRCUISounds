@@ -38,9 +38,9 @@ namespace JanSharp
             Toggle toggle = toggleSounds.GetComponent<Toggle>();
 
             SerializedObject soundsRuntimeSo = new(soundsRuntime);
-            soundsRuntimeSo.FindProperty("toggle").objectReferenceValue = toggle;
-            soundsRuntimeSo.FindProperty("onTurnOnListener").objectReferenceValue = turnOnListener;
-            soundsRuntimeSo.FindProperty("onTurnOffListener").objectReferenceValue = turnOffListener;
+            soundsRuntimeSo.FindProperty(UIToggleSoundsRuntime.TogglePropName).objectReferenceValue = toggle;
+            soundsRuntimeSo.FindProperty(UIToggleSoundsRuntime.OnTurnOnListenerPropName).objectReferenceValue = turnOnListener;
+            soundsRuntimeSo.FindProperty(UIToggleSoundsRuntime.OnTurnOffListenerPropName).objectReferenceValue = turnOffListener;
             soundsRuntimeSo.ApplyModifiedProperties();
 
             UISoundsListenerUtil.SetPersistentListener(
@@ -112,8 +112,8 @@ namespace JanSharp
         {
             base.OnEnable();
             so = serializedObject;
-            turnOnDefinitionNameProp = so.FindProperty("turnOnDefinitionName");
-            turnOffDefinitionNameProp = so.FindProperty("turnOffDefinitionName");
+            turnOnDefinitionNameProp = so.FindProperty(nameof(UIToggleSounds.turnOnDefinitionName));
+            turnOffDefinitionNameProp = so.FindProperty(nameof(UIToggleSounds.turnOffDefinitionName));
         }
 
         public override void OnInspectorGUI()

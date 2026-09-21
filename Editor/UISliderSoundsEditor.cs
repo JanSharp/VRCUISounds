@@ -81,7 +81,7 @@ namespace JanSharp
         {
             base.OnEnable();
             so = serializedObject;
-            definitionNameProp = so.FindProperty("definitionName");
+            definitionNameProp = so.FindProperty(nameof(UISliderSounds.definitionName));
         }
 
         public override void OnInspectorGUI()

@@ -11,6 +11,9 @@ namespace JanSharp.Internal
         [SerializeField] private Transform listenersContainer;
 #if UNITY_EDITOR && !COMPILER_UDONSHARP
         public Transform ListenersContainer => listenersContainer;
+        public const string AudioSourcePropName = nameof(audioSource);
+        public const string ListenersContainerPropName = nameof(listenersContainer);
+        public const string MutedPropName = nameof(muted);
 #endif
 
         [SerializeField] private bool muted = false;
